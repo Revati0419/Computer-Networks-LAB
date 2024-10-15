@@ -1,0 +1,118 @@
+Analyzing TCP, UDP, and IPv4 headers using Wireshark can help you understand how network protocols work in detail. Wireshark is a powerful network analysis tool that captures packets in real time and allows you to inspect their contents. Here’s a guide to analyzing the headers of TCP, UDP, and IPv4 packets using Wireshark.
+
+### 1. **Capturing Packets in Wireshark**
+
+Before analyzing the headers, you need to capture network traffic:
+
+1. Open Wireshark.
+2. Choose the correct network interface (e.g., `Wi-Fi` or `Ethernet`) from the list.
+3. Click on **Start** to begin capturing network traffic.
+4. Generate traffic by browsing the internet, downloading files, or running specific applications that use TCP or UDP protocols.
+5. Once you have enough data, click **Stop** to halt the capture.
+
+Now you can filter and analyze the packets.
+
+### 2. **Filtering for TCP, UDP, and IPv4 Packets**
+
+To focus on specific protocol traffic:
+- **TCP Traffic**: Apply the filter `tcp`.
+- **UDP Traffic**: Apply the filter `udp`.
+- **IPv4 Traffic**: Apply the filter `ip`.
+
+### 3. **Analyzing IPv4 Header**
+
+1. **Find an IPv4 Packet**: Use the filter `ip` to view only IPv4 packets. Click on any packet to examine its details.
+
+2. **Expand the IP Layer**: In the packet details pane (the middle section), expand the **Internet Protocol Version 4** (IPv4) layer.
+
+3. **Fields in IPv4 Header**:
+   - **Version**: This field should be `4`, indicating IPv4.
+   - **Header Length**: Specifies the size of the IPv4 header (usually 20 bytes).
+   - **Total Length**: The total length of the packet (header + data).
+   - **Identification**: Identifies the fragments of the original packet.
+   - **Flags**: Used for controlling fragmentation.
+   - **Fragment Offset**: Specifies the position of this fragment in the original packet.
+   - **TTL (Time to Live)**: Decrements by 1 each time the packet passes through a router. When it reaches 0, the packet is discarded.
+   - **Protocol**: Identifies the higher-level protocol (TCP = 6, UDP = 17).
+   - **Source and Destination IP Address**: The IP addresses of the sender and receiver.
+
+   Example:
+   ```
+   Internet Protocol Version 4, Src: 192.168.1.1, Dst: 192.168.1.2
+   Version: 4
+   Header Length: 20 bytes
+   Total Length: 52 bytes
+   Identification: 0x1c46 (7238)
+   Flags: 0x02 (Don't Fragment)
+   Time to live: 64
+   Protocol: TCP (6)
+   Source: 192.168.1.1
+   Destination: 192.168.1.2
+   ```
+
+### 4. **Analyzing TCP Header**
+
+1. **Find a TCP Packet**: Use the filter `tcp` to display only TCP packets.
+
+2. **Expand the TCP Layer**: In the packet details pane, expand the **Transmission Control Protocol** (TCP) layer.
+
+3. **Fields in TCP Header**:
+   - **Source and Destination Ports**: Identifies the application-layer protocol or service (e.g., HTTP uses port 80).
+   - **Sequence Number**: Indicates the sequence number of the first byte of data in this packet.
+   - **Acknowledgment Number**: If the ACK flag is set, this contains the next expected sequence number.
+   - **Header Length**: The size of the TCP header.
+   - **Flags**: Contains control flags like SYN, ACK, FIN, etc.
+   - **Window Size**: The size of the receive window, which controls flow control.
+   - **Checksum**: Used for error-checking the TCP header and data.
+
+   Example:
+   ```
+   Transmission Control Protocol, Src Port: 443, Dst Port: 51820, Seq: 1, Ack: 1, Len: 0
+   Source Port: 443
+   Destination Port: 51820
+   Sequence Number: 1
+   Acknowledgment Number: 1
+   Header Length: 32 bytes
+   Flags: 0x10 (ACK)
+   Window: 507
+   Checksum: 0xe47e
+   ```
+
+### 5. **Analyzing UDP Header**
+
+1. **Find a UDP Packet**: Use the filter `udp` to focus on UDP traffic.
+
+2. **Expand the UDP Layer**: In the packet details pane, expand the **User Datagram Protocol** (UDP) layer.
+
+3. **Fields in UDP Header**:
+   - **Source and Destination Ports**: Identifies the applications (e.g., DNS uses port 53).
+   - **Length**: Specifies the total length of the UDP packet (header + data).
+   - **Checksum**: Used for error-checking the UDP header and data.
+
+   Example:
+   ```
+   User Datagram Protocol, Src Port: 5683, Dst Port: 5683
+   Source Port: 5683
+   Destination Port: 5683
+   Length: 8
+   Checksum: 0x3c84
+   ```
+
+### 6. **Example Analysis Walkthrough:**
+
+Let’s say you captured traffic for an HTTP connection using TCP.
+
+- Filter for TCP packets using `tcp`.
+- Select one of the packets in the list and look at the **IP** section to see the **source** and **destination IP addresses**. Verify that the **Protocol** field is set to **6** (indicating TCP).
+- Next, expand the **TCP** section to see details such as:
+   - **Source Port** (e.g., 80 for HTTP).
+   - **Sequence Number** and **Acknowledgment Number**, which show the sequence of the connection.
+   - **Flags** (e.g., SYN for the start of the connection or ACK for acknowledgment).
+
+### 7. **Conclusion**
+
+- **TCP** headers contain details about sequence numbers, acknowledgments, and flags, making TCP more reliable with its stateful connection.
+- **UDP** headers are much simpler, containing just ports, length, and checksum because UDP is a connectionless protocol.
+- **IPv4** headers provide information about routing, fragmentation, and addressing.
+
+Wireshark’s detailed inspection of these headers gives deep insights into network communication at the packet level, and this is useful for troubleshooting network issues, understanding protocol behavior, or learning network concepts.
